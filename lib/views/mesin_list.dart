@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/mesin.dart'; // Pastikan import model Mesin
-import '../services/api_service.dart'; // Pastikan import ApiService
-import 'machine_detail.dart'; // Mengimpor halaman detail
-import 'package:flutter/services.dart'; // Untuk mengatur orientasi
+import 'package:flutter/services.dart'; // Import for SystemChrome
+import '../models/mesin.dart';
+import '../services/api_service.dart';
+import 'machine_detail.dart';
 
 class MesinList extends StatelessWidget {
   final ApiService apiService = ApiService();
@@ -12,33 +12,33 @@ class MesinList extends StatelessWidget {
     return StreamBuilder<List<Mesin>>(
       stream: apiService.getMesins(),
       builder: (context, snapshot) {
-        // Loading state
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        // Error state
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
 
-        // No data state
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return const Center(child: Text('No active machines available'));
         }
 
-        // Data available
         final mesins = snapshot.data!;
-        return ListView.builder(
+        /* return ListView(
+          children: ListTile.divideTiles(
+            context: context,
+            tiles: mesins.map((machine) {
+              return MachineListTile(machine: machine);
+            }),
+          ).toList(),
+        ); */
+        return ListView.separated(
           itemCount: mesins.length,
           itemBuilder: (context, index) {
-            return Column(
-              children: [
-                MachineListTile(machine: mesins[index]),
-                Divider(), // Garis di bawah setiap item
-              ],
-            );
+            return MachineListTile(machine: mesins[index]);
           },
+          separatorBuilder: (context, index) => const Divider(),
         );
       },
     );
@@ -52,8 +52,27 @@ class MachineListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // Menentukan warna berdasarkan status mesin
+    Color tileColor;
+    Color iconColor;
+
+    switch (machine.status) {
+      case 'ready':
+        tileColor = Colors.green.withOpacity(0.1); // Warna untuk status aktif
+        iconColor = Colors.green;
+        break;
+      case 'maintence':
+      case 'pending': // Menggunakan dua case untuk satu blok kode
+        tileColor = Colors.orange.withOpacity(0.1); // Warna untuk status maintenance atau pending
+        iconColor = Colors.orange;
+        break;
+      default:
+        tileColor = Colors.grey.withOpacity(0.1); // Warna default
+        iconColor = Colors.grey;
+    }
     return ListTile(
-      leading: Icon(Icons.device_hub, size: 48, color: Colors.blue), // Ikon
+      leading: Icon(Icons.factory, size: 48, color: iconColor),
       title: Text(
         machine.noMachine,
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -76,7 +95,7 @@ class MachineListTile extends StatelessWidget {
       ),
       trailing: const Icon(Icons.arrow_forward_ios, size: 16), // Ikon tambahan
       contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16), // Padding
-      tileColor: Colors.lightBlueAccent.withOpacity(0.1), // Warna latar belakang tile
+      tileColor: tileColor, // Warna latar belakang tile
       onTap: () {
         // Navigasi ke halaman detail
         Navigator.push(

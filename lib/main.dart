@@ -1,7 +1,7 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Tambahkan import ini
-import 'widgets/mesin_list.dart';
+import 'views/mesin_list.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,9 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Downtime Logger',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       home: Scaffold(
-        appBar: AppBar(title: Text('Mesin Aktif')),
-        body: MesinList(), // Menggunakan widget MesinList
+        appBar: AppBar(title: Text('Daftar Mesin')),
+        body: MesinList(), // menggunakan mesin widget list
       ),
     );
   }

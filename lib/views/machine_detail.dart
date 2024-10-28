@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import for SystemChrome
 import '../services/api_service.dart'; // Pastikan import ApiService
 import '../models/mesin.dart'; // Import model Mesin
-import 'package:flutter/services.dart'; // Import for SystemChrome
 
 class MachineDetailPage extends StatefulWidget {
   final String idMesin;  // Parameter for machine number
