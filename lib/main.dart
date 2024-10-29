@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Tambahkan import ini
 import 'views/mesin_list.dart';
@@ -22,8 +21,26 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        appBar: AppBar(title: Text('Daftar Mesin')),
-        body: MesinList(), // menggunakan mesin widget list
+        backgroundColor: const Color(0xFFF2F2F7), // Mengatur warna latar belakang body
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // Mengatur alignment ke kiri
+          children: [
+            const SizedBox(height: 40), // Menambahkan ruang di atas judul
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Machines', // Judul di atas ListView
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Expanded(
+              child: MachineList(), // Menggunakan mesin widget list
+            ),
+          ],
+        ),
       ),
     );
   }
