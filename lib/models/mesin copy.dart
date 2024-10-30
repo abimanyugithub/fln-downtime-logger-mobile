@@ -1,15 +1,15 @@
 // lib/models/mesin.dart
-/* class DowntimeRole {
-  final int downtimeRoleID; // Menggunakan 'id' untuk konsistensi
+class DowntimeRole {
+  final int DowntimeRoleID;
 
-  DowntimeRole({required this.downtimeRoleID});
+  DowntimeRole({required this.DowntimeRoleID});
 
   factory DowntimeRole.fromJson(Map<String, dynamic> json) {
     return DowntimeRole(
-      downtimeRoleID: json['id'],
+      DowntimeRoleID: json['id'],
     );
   }
-} */
+}
 
 class Peran {
   final String roleID; // Unique identifier for the role
@@ -34,7 +34,8 @@ class Mesin {
   final String categoryName;
   final String status;
   final List<Peran> roleName;
-  // final List<DowntimeRole> downtimeRoles;
+  final List<DowntimeRole> downtimeRoles; // Tambahkan ini
+
 
   Mesin({
     required this.id,
@@ -42,15 +43,24 @@ class Mesin {
     required this.categoryName,
     required this.status,
     required this.roleName,
-    // required this.downtimeRoles,
+    required this.downtimeRoles, // Tambahkan ini
   });
+
+  /* factory Mesin.fromJson(Map<String, dynamic> json) {
+    return Mesin(
+      id: json['id'],
+      noMachine: json['no_machine'],
+      categoryName: json['category_machine__category'], // Ambil nama kategori dari JSON
+      status: json['status']
+    );
+  } */
 
   factory Mesin.fromJson(Map<String, dynamic> json) {
     var peranList = json['peran'] as List;
     List<Peran> peranItems = peranList.map((i) => Peran.fromJson(i)).toList();
 
-    //var downtimeList = json['downtime_roles'] as List; // Ambil dari JSON
-    //List<DowntimeRole> downtimeRoleItems = downtimeList.map((i) => DowntimeRole.fromJson(i)).toList();
+    var downtimeList = json['downtime_roles'] as List; // Misalnya, ambil dari JSON
+    List<DowntimeRole> downtimeRoleItems = downtimeList.map((i) => DowntimeRole.fromJson(i)).toList();
 
     return Mesin(
       id: json['id'],
@@ -58,7 +68,7 @@ class Mesin {
       categoryName: json['category_machine__category'],
       status: json['status'],
       roleName: peranItems,
-      //downtimeRoles: downtimeRoleItems,
+      downtimeRoles: downtimeRoleItems, // Tambahkan ini
     );
   }
 }

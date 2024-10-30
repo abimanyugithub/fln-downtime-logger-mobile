@@ -134,7 +134,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                     children: [
                       // Memanggil fungsi yang telah didefinisikan sebelumnya
                       buildRolesTab(context, mesinDetail, apiService, refreshData),
-                      buildDowntimeTab(),
+                      buildDowntimeTab(context, mesinDetail),
                     ],
                   ),
                 ),
