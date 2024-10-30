@@ -125,7 +125,7 @@ class MachineListCard extends StatelessWidget {
         tileColor = Colors.green.withOpacity(0.1);
         iconColor = Colors.green;
         break;
-      case 'maintence':
+      case 'maintain':
       case 'pending':
         tileColor = Colors.orange.withOpacity(0.1);
         iconColor = Colors.orange;

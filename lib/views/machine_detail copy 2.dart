@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for SystemChrome
 import '../services/api_service.dart'; // Import ApiService
 import '../models/mesin.dart'; // Import model Mesin
-import 'widget_tab/roles.dart'; // Impor file information_tab.dart
-import 'widget_tab/downtime.dart'; // Impor file graph_tab.dart
 
 class MachineDetailPage extends StatefulWidget {
   final String idMesin; // Parameter for machine number
@@ -16,25 +14,17 @@ class MachineDetailPage extends StatefulWidget {
   _MachineDetailPageState createState() => _MachineDetailPageState();
 }
 
-class _MachineDetailPageState extends State<MachineDetailPage> with SingleTickerProviderStateMixin {
+class _MachineDetailPageState extends State<MachineDetailPage> {
   final ApiService apiService = ApiService();
   late Future<Mesin?> futureMesin;
-  late TabController _tabController; // tambahin tab
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this); // Set jumlah tab di sini
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitUp,
     ]);
-  }
-
-  @override
-  void dispose() {
-    _tabController.dispose(); // Dispose tab controller saat tidak digunakan
-    super.dispose();
   }
 
   // fungsi refresh setelah onpressed
@@ -114,28 +104,83 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                 ),
 
                 const SizedBox(height: 20), // Space between card and role buttons
+          
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // Horizontal padding for role buttons
+                  child: GridView.builder(
+                    shrinkWrap: true, // Use this to avoid infinite height issues
+                    physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4, // Set 4 columns
+                      childAspectRatio: 0.7, // Adjust aspect ratio for better fit
+                      crossAxisSpacing: 8.0, // Spacing between columns
+                      mainAxisSpacing: 8.0, // Spacing between rows
+                    ),
+                    itemCount: mesinDetail.roleName.length, // Number of items
+                    itemBuilder: (context, index) {
+                      final peran = mesinDetail.roleName[index]; // Access each role
+                      return Column( // Use Column to stack button and text
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              
+                              // Show role detail in a dialog
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Role Details'),
+                                    content: Text('Anda menekan ${peran.roleName}'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Close the dialog
+                                        },
+                                        child: Text('Close'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          // Call sendRoleToBackend when "OK" is pressed
+                                          apiService.updateMesinStatus(mesinDetail.id, peran.roleID).then((_) {
+                                            // Close the dialog after sending
+                                            Navigator.of(context).pop();
+                                            refreshData(); // Refresh data after update
+                                          });
+                                        },
+                                        child: Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
 
-                // Container to add padding to TabBar
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0), // Padding kiri dan kanan
-                  child: TabBar(
-                    controller: _tabController,
-                    tabs: [
-                      Tab(text: 'Roles'),
-                      Tab(text: 'Downtime'),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 20), // Space between tab bar and content
-                Expanded( // Use Expanded to allow TabBarView to take available space
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      // Memanggil fungsi yang telah didefinisikan sebelumnya
-                      buildRolesTab(context, mesinDetail, apiService, refreshData),
-                      buildDowntimeTab(),
-                    ],
+                            },
+                            child: Container(
+                              width: 60.0, // Fixed width for square button
+                              height: 60.0, // Fixed height for square button
+                              decoration: BoxDecoration(
+                                color: Colors.blue, // Background color for button
+                                borderRadius: BorderRadius.circular(15.0), // Rounded corners
+                              ),
+                              child: Icon(
+                                Icons.waving_hand, // Icon for each role
+                                color: Colors.white, // Icon color
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 4.0), // Space between icon and text
+                          SizedBox(
+                            width: 60.0, // Fixed width for text
+                            child: Text(
+                              peran.roleName,
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis, // Ellipsis for long text
+                              style: TextStyle(fontSize: 12.0), // Adjust font size if needed
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],
