@@ -1,16 +1,16 @@
 // lib/models/mesin.dart
 class Peran {
-  final String id; // Unique identifier for the role
+  final String roleID; // Unique identifier for the role
   final String roleName; // Name of the role
 
   Peran({
-    required this.id,
+    required this.roleID,
     required this.roleName,
   });
 
   factory Peran.fromJson(Map<String, dynamic> json) {
     return Peran(
-      id: json['id'],
+      roleID: json['id'],
       roleName: json['role_name'],
     );
   }
@@ -40,6 +40,7 @@ class Mesin {
       status: json['status']
     );
   } */
+
   factory Mesin.fromJson(Map<String, dynamic> json) {
     var peranList = json['peran'] as List;
     List<Peran> peranItems = peranList.map((i) => Peran.fromJson(i)).toList();

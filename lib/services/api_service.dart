@@ -66,4 +66,71 @@ class ApiService {
       await Future.delayed(Duration(seconds: 5)); // Delay 5 detik
     }
   } */
+
+  // Function to send the role to the backend
+  /* Future<Peran?> sendRoleToBackend(String mesinId, String roleID) async {
+    // Example GET request to check if the role exists
+    final response = await http.get(Uri.parse('$baseUrl/$mesinId/$roleID/'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return Peran.fromJson(data); // Kembalikan objek
+    } else {
+      print('Error: ${response.reasonPhrase}');
+      return null; // Mengembalikan null jika gagal
+    }
+  } */
+
+  // Function to send the role to the backend
+  Future<void> updateMesinStatus(String mesinId, String roleID) async {
+    final url = Uri.parse('$baseUrl/api/endpoint/'); // Replace with your backend URL
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'id_mesin': mesinId,
+          'id_role': roleID,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // Handle the response from the backend if needed
+        print('Role sent successfully: ${response.body}');
+      } else {
+        // Handle the error response
+        print('Failed to send role: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle any exceptions
+      print('Error sending role: $error');
+    }
+  }
+  
+
+    /* if (getResponse.statusCode == 200) {
+      // The role exists, now send a POST request
+      final postResponse = await http.post(
+        Uri.parse('$baseUrl/$mesinId/$roleID/'), // Adjust the endpoint for the POST request
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'role_name': roleID, // Send the role name as a parameter
+        }),
+      );
+
+      if (postResponse.statusCode == 200) {
+        print('Role sent successfully: ${postResponse.body}');
+      } else {
+        print('Error: ${postResponse.reasonPhrase}');
+      }
+    } else {
+      print('Error: ${getResponse.reasonPhrase}');
+    }
+  }
+  */
 }
