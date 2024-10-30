@@ -16,6 +16,7 @@ class MachineDetailPage extends StatefulWidget {
 
 class _MachineDetailPageState extends State<MachineDetailPage> {
   final ApiService apiService = ApiService();
+  late Future<Mesin?> futureMesin;
 
   @override
   void initState() {
@@ -24,6 +25,13 @@ class _MachineDetailPageState extends State<MachineDetailPage> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitUp,
     ]);
+  }
+
+  // fungsi refresh setelah onpressed
+  void refreshData() {
+    setState(() {
+      futureMesin = apiService.fetchMesinDetail(widget.idMesin);
+    });
   }
 
   @override
@@ -136,6 +144,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> {
                                           apiService.updateMesinStatus(mesinDetail.id, peran.roleID).then((_) {
                                             // Close the dialog after sending
                                             Navigator.of(context).pop();
+                                            refreshData(); // Refresh data after update
                                           });
                                         },
                                         child: Text('OK'),
