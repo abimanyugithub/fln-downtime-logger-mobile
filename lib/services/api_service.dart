@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import '../models/models.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://10.35.37.165:8000/myapp/mesin';
-  // static const String baseUrl = 'http://192.168.240.163:8000/myapp/mesin';
+  //static const String baseUrl = 'http://10.35.37.165:8000/myapp/mesin';
+  static const String baseUrl = 'http://192.168.240.163:8000/myapp/mesin';
 
   // Stream untuk mengirim list data secara realtime
   /* Stream<List<Mesin>> getMachines() async* {
@@ -82,7 +83,7 @@ class ApiService {
   } */
 
   // Function to send the role to the backend
-  Future<void> updateMesinStatus(String mesinId, String roleID) async {
+  Future<void> updateMesinStatus(BuildContext context, String mesinId, String roleID) async {
     final url = Uri.parse('$baseUrl/api/endpoint/'); // Replace with your backend URL
 
     try {
@@ -97,20 +98,54 @@ class ApiService {
         }),
       );
 
+      String message; // Initialize message with a default value
+
       if (response.statusCode == 200) {
+        // If successful, parse the response
         // Handle the response from the backend if needed
         print('Role sent successfully: ${response.body}');
+        // print('Role sent successfully: $message');
+        final responseData = jsonDecode(response.body);
+        message = responseData['message'] ?? 'Status mesin berhasil diperbarui!';
       } else {
         // Handle the error response
+        final responseData = jsonDecode(response.body);
+        message = responseData['message'] ?? 'Terjadi kesalahan, silahkan coba lagi.';
         print('Failed to send role: ${response.statusCode}');
       }
-    } catch (error) {
-      // Handle any exceptions
-      print('Error sending role: $error');
-    }
-  }
-  
 
+      // Tampilkan SnackBar
+      /* ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: Duration(seconds: 2),
+        ),
+      ); */
+      // Tampilkan AlertDialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Info'),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Tutup dialog
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+        
+      } catch (error) {
+        // Handle any exceptions
+        print('Error sending role: $error');
+      }
+    }
+  
     /* if (getResponse.statusCode == 200) {
       // The role exists, now send a POST request
       final postResponse = await http.post(

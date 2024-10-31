@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.all(16.0),
               child: Text(
-                'Machines', // Judul di atas ListView
+                'Mesin', // Judul di atas ListView
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

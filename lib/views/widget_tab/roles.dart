@@ -26,25 +26,25 @@ Widget buildRolesTab(BuildContext context, Mesin mesinDetail, ApiService apiServ
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Role Details'),
-                      content: Text('Anda menekan ${peran.roleName}'),
+                      title: Text('Terjadi masalah pada mesin?'),
+                      content: Text('Silakan pilih "Lanjutkan" untuk mengirimkan notifikasi kepada ${peran.roleName}.'),
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); // Close the dialog
                           },
-                          child: Text('Close'),
+                          child: Text('Tutup'),
                         ),
                         TextButton(
                           onPressed: () {
                             // Call sendRoleToBackend when "OK" is pressed
-                            apiService.updateMesinStatus(mesinDetail.id, peran.roleID).then((_) {
+                            apiService.updateMesinStatus(context, mesinDetail.id, peran.roleID).then((_) {
                               // Close the dialog after sending
                               Navigator.of(context).pop();
                               refreshData(); // Refresh data after update
                             });
                           },
-                          child: Text('OK'),
+                          child: Text('Lanjutkan'),
                         ),
                       ],
                     );
@@ -78,5 +78,26 @@ Widget buildRolesTab(BuildContext context, Mesin mesinDetail, ApiService apiServ
         );
       },
     ),
+  );
+}
+
+// Fungsi untuk menampilkan alert jika mesin tidak dapat diubah
+void _showAlert(BuildContext context, String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Peringatan'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text('OK'),
+          ),
+        ],
+      );
+    },
   );
 }

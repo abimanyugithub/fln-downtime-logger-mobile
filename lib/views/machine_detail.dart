@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for SystemChrome
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../services/api_service.dart'; // Import ApiService
 import '../models/models.dart'; // Import model Mesin
 import 'widget_tab/roles.dart'; // Impor file information_tab.dart
@@ -94,12 +95,12 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Machine No: ${mesinDetail.noMachine}',
+                            'No. Mesin: ${mesinDetail.noMachine}',
                             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'Category: ${mesinDetail.categoryName ?? "Tidak ada kategori"}',
+                            'Kategori: ${mesinDetail.categoryName ?? "Tidak ada kategori"}',
                             style: TextStyle(fontSize: 18),
                           ),
                           const SizedBox(height: 10),
@@ -153,7 +154,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Select a Role', // Title above buttons
+                            'Pilih Role', // Title above buttons
                             style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
@@ -176,7 +177,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                                             context: context,
                                             builder: (BuildContext context) {
                                               return AlertDialog(
-                                                title: Text('Role Details'),
+                                                title: Text('Role Detail'),
                                                 content: Text('Anda menekan ${peran.roleName}'),
                                                 actions: <Widget>[
                                                   TextButton(
@@ -188,7 +189,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                                                   TextButton(
                                                     onPressed: () {
                                                       // Call sendRoleToBackend when "OK" is pressed
-                                                      apiService.updateMesinStatus(mesinDetail.id, peran.roleID).then((_) {
+                                                      apiService.updateMesinStatus(context, mesinDetail.id, peran.roleID).then((_) {
                                                         Navigator.of(context).pop(); // Close the dialog after sending
                                                       });
                                                     },
@@ -235,7 +236,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                 );
               },
               child: Icon(Icons.waving_hand), // Icon for FloatingActionButton
-              tooltip: 'Show Roles',
+              tooltip: 'Tampilkan Role',
             ),
           );
         }

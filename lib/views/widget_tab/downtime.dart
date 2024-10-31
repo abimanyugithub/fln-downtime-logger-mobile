@@ -119,7 +119,7 @@ void _showBottomModal(BuildContext context, DowntimePeran role) {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              child: Text('Accept'),
+              child: Text('Terima'),
             ),
           ],
         ),

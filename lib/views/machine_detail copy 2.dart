@@ -141,7 +141,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> {
                                       TextButton(
                                         onPressed: () {
                                           // Call sendRoleToBackend when "OK" is pressed
-                                          apiService.updateMesinStatus(mesinDetail.id, peran.roleID).then((_) {
+                                          apiService.updateMesinStatus(context, mesinDetail.id, peran.roleID).then((_) {
                                             // Close the dialog after sending
                                             Navigator.of(context).pop();
                                             refreshData(); // Refresh data after update
@@ -233,7 +233,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> {
                                                   TextButton(
                                                     onPressed: () {
                                                       // Call sendRoleToBackend when "OK" is pressed
-                                                      apiService.updateMesinStatus(mesinDetail.id, peran.roleID).then((_) {
+                                                      apiService.updateMesinStatus(context, mesinDetail.id, peran.roleID).then((_) {
                                                         Navigator.of(context).pop(); // Close the dialog after sending
                                                       });
                                                     },
