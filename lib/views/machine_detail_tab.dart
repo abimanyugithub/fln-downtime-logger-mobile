@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for SystemChrome
 import '../services/api_service.dart'; // Import ApiService
-import '../models/mesin.dart'; // Import model Mesin
+import '../models/models.dart'; // Import model Mesin
 
 class MachineDetailPage extends StatefulWidget {
   final String idMesin;

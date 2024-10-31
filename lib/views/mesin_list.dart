@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for SystemChrome
-import '../models/mesin.dart';
+import '../models/models.dart';
 import '../services/api_service.dart';
 import 'machine_detail.dart';
 
@@ -85,7 +85,7 @@ class _MachineListState extends State<MachineList> {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No active machines available'));
+            return const Center(child: Text('No machines available'));
           }
 
           /* final machines = snapshot.data!;
@@ -96,11 +96,11 @@ class _MachineListState extends State<MachineList> {
             },
             separatorBuilder: (context, index) => const Divider(),
           ); */
-          final machines = snapshot.data!;
+          final mesin = snapshot.data!;
           return ListView.builder(
-            itemCount: machines.length,
+            itemCount: mesin.length,
             itemBuilder: (context, index) {
-              return MachineListCard(machine: machines[index]);
+              return MachineListCard(machine: mesin[index]);
             },
           );
         },

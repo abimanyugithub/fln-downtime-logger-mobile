@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/mesin.dart';
+import '../models/models.dart';
 
 class ApiService {
-  // static const String baseUrl = 'http://10.35.37.165:8000/myapp/mesin';
-  static const String baseUrl = 'http://192.168.240.163:8000/myapp/mesin';
+  static const String baseUrl = 'http://10.35.37.165:8000/myapp/mesin';
+  // static const String baseUrl = 'http://192.168.240.163:8000/myapp/mesin';
 
   // Stream untuk mengirim list data secara realtime
   /* Stream<List<Mesin>> getMachines() async* {

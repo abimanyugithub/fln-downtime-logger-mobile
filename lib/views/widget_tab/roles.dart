@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/api_service.dart'; // Import ApiService
-import '../../models/mesin.dart'; // Pastikan jalur ini benar
+import '../../models/models.dart'; // Pastikan jalur ini benar
 
 Widget buildRolesTab(BuildContext context, Mesin mesinDetail, ApiService apiService, Function refreshData) {
   return Padding(
@@ -14,9 +14,9 @@ Widget buildRolesTab(BuildContext context, Mesin mesinDetail, ApiService apiServ
         crossAxisSpacing: 8.0, // Spacing between columns
         mainAxisSpacing: 8.0, // Spacing between rows
       ),
-      itemCount: mesinDetail.roleName.length, // Number of items
+      itemCount: mesinDetail.roles.length, // Number of items
       itemBuilder: (context, index) {
-        final peran = mesinDetail.roleName[index]; // Access each role
+        final peran = mesinDetail.roles[index]; // Access each role
         return Column( // Use Column to stack button and text
           children: [
             GestureDetector(

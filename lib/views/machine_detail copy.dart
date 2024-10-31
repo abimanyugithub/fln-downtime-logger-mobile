@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for SystemChrome
 import '../services/api_service.dart'; // Import ApiService
-import '../models/mesin.dart'; // Import model Mesin
+import '../models/models.dart'; // Import model Mesin
 
 class MachineDetailPage extends StatefulWidget {
   final String idMesin; // Parameter for machine number
@@ -117,9 +117,9 @@ class _MachineDetailPageState extends State<MachineDetailPage> {
                             children: [
                               Expanded(
                                 child: ListView.builder(
-                                  itemCount: mesinDetail.roleName.length,
+                                  itemCount: mesinDetail.roles.length,
                                   itemBuilder: (context, index) {
-                                    final peran = mesinDetail.roleName[index];
+                                    final peran = mesinDetail.roles[index];
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(vertical: 8.0), // Jarak vertikal antar ListTile
                                       child: ListTile(

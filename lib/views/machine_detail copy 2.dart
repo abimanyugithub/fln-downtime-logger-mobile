@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for SystemChrome
 import '../services/api_service.dart'; // Import ApiService
-import '../models/mesin.dart'; // Import model Mesin
+import '../models/models.dart'; // Import model Mesin
 
 class MachineDetailPage extends StatefulWidget {
   final String idMesin; // Parameter for machine number
@@ -116,9 +116,9 @@ class _MachineDetailPageState extends State<MachineDetailPage> {
                       crossAxisSpacing: 8.0, // Spacing between columns
                       mainAxisSpacing: 8.0, // Spacing between rows
                     ),
-                    itemCount: mesinDetail.roleName.length, // Number of items
+                    itemCount: mesinDetail.roles.length, // Number of items
                     itemBuilder: (context, index) {
-                      final peran = mesinDetail.roleName[index]; // Access each role
+                      final peran = mesinDetail.roles[index]; // Access each role
                       return Column( // Use Column to stack button and text
                         children: [
                           GestureDetector(
@@ -208,7 +208,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> {
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                             child: Row(
-                              children: mesinDetail.roleName.map((peran) {
+                              children: mesinDetail.roles.map((peran) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Column(

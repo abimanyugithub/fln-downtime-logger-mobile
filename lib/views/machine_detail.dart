@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import for SystemChrome
 import '../services/api_service.dart'; // Import ApiService
-import '../models/mesin.dart'; // Import model Mesin
+import '../models/models.dart'; // Import model Mesin
 import 'widget_tab/roles.dart'; // Impor file information_tab.dart
 import 'widget_tab/downtime.dart'; // Impor file graph_tab.dart
 
@@ -163,7 +163,7 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal, // Enable horizontal scrolling
                             child: Row(
-                              children: mesinDetail.roleName.map((peran) {
+                              children: mesinDetail.roles.map((peran) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                   child: Column(
