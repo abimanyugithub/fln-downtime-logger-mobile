@@ -3,15 +3,13 @@ import 'package:flutter/services.dart'; // Import for SystemChrome
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../services/api_service.dart'; // Import ApiService
 import '../models/models.dart'; // Import model Mesin
-import 'widget_tab/roles.dart'; // Impor file information_tab.dart
-import 'widget_tab/downtime.dart'; // Impor file graph_tab.dart
+import 'widget/roles.dart'; // Impor file information_tab.dart
+import 'widget/downtime.dart'; // Impor file graph_tab.dart
 
 class MachineDetailPage extends StatefulWidget {
-  final String idMesin; // Parameter for machine number
+  final String idMesin;
 
-  MachineDetailPage({
-    required this.idMesin,
-  });
+  MachineDetailPage({required this.idMesin});
 
   @override
   _MachineDetailPageState createState() => _MachineDetailPageState();
@@ -20,28 +18,22 @@ class MachineDetailPage extends StatefulWidget {
 class _MachineDetailPageState extends State<MachineDetailPage> with SingleTickerProviderStateMixin {
   final ApiService apiService = ApiService();
   late Future<Mesin?> futureMesin;
-  late TabController _tabController; // tambahin tab
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this); // Set jumlah tab di sini
+    _tabController = TabController(length: 2, vsync: this);
+    futureMesin = apiService.fetchMesinDetail(widget.idMesin); // Initialize futureMesin here
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitUp,
     ]);
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose(); // Dispose tab controller saat tidak digunakan
-    super.dispose();
-  }
-
-  // fungsi refresh setelah onpressed
   void refreshData() {
     setState(() {
-      futureMesin = apiService.fetchMesinDetail(widget.idMesin);
+      futureMesin = apiService.fetchMesinDetail(widget.idMesin); // Refresh data
     });
   }
 
@@ -59,6 +51,8 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
         } else {
           final mesinDetail = snapshot.data!;
           final screenWidth = MediaQuery.of(context).size.width; // Get the screen width
+
+          
           return Scaffold(
             /* appBar: AppBar(
               title: Text('Detail'),
@@ -135,108 +129,11 @@ class _MachineDetailPageState extends State<MachineDetailPage> with SingleTicker
                     children: [
                       // Memanggil fungsi yang telah didefinisikan sebelumnya
                       buildRolesTab(context, mesinDetail, apiService, refreshData),
-                      buildDowntimeTab(context, mesinDetail),
+                      buildDowntimeTab(context, mesinDetail, apiService, refreshData),
                     ],
                   ),
                 ),
               ],
-            ),
-
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                // Show modal bottom sheet with title and role icons with labels in a row
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Pilih Role', // Title above buttons
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 16.0), // Space between title and buttons
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal, // Enable horizontal scrolling
-                            child: Row(
-                              children: mesinDetail.roles.map((peran) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          // Show role detail in a dialog
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: Text('Role Detail'),
-                                                content: Text('Anda menekan ${peran.roleName}'),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context).pop(); // Close the dialog
-                                                    },
-                                                    child: Text('Close'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      // Call sendRoleToBackend when "OK" is pressed
-                                                      apiService.updateMesinStatus(context, mesinDetail.id, peran.roleID).then((_) {
-                                                        Navigator.of(context).pop(); // Close the dialog after sending
-                                                      });
-                                                    },
-                                                    child: Text('OK'),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        child: Container(
-                                          width: 60.0, // Fixed width for square button
-                                          height: 60.0, // Fixed height for square button
-                                          decoration: BoxDecoration(
-                                            color: Colors.blue, // Background color for button
-                                            borderRadius: BorderRadius.circular(8.0), // Rounded corners
-                                          ),
-                                          child: Icon(
-                                            Icons.person, // Icon for each role
-                                            color: Colors.white, // Icon color
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 4.0), // Space between icon and text
-                                      SizedBox(
-                                        width: 60.0, // Fixed width for text
-                                        child: Text(
-                                          peran.roleName,
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.ellipsis, // Ellipsis for long text
-                                          style: TextStyle(fontSize: 12.0), // Adjust font size if needed
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Icon(Icons.waving_hand), // Icon for FloatingActionButton
-              tooltip: 'Tampilkan Role',
             ),
           );
         }

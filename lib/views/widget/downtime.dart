@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../models/models.dart'; // Pastikan jalur ini benar
+import '../../services/api_service.dart';
+import 'bottom_modal.dart';
 
-Widget buildDowntimeTab(BuildContext context, Mesin mesinDetail) {
+Widget buildDowntimeTab(BuildContext context, Mesin mesinDetail, ApiService apiService, Function refreshData) {
   return Padding(
-    padding: const EdgeInsets.all(16.0),
+    padding: const EdgeInsets.symmetric(horizontal: 16.0), 
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -18,9 +20,11 @@ Widget buildDowntimeTab(BuildContext context, Mesin mesinDetail) {
                     elevation: 4,
                     margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: InkWell(
-                      onTap: () {
-                        _showBottomModal(context, role);
-                      },
+                      onTap: role.downtimeRoleStatus == "done"
+                          ? null
+                          : () {
+                              showBottomModal(context, role, refreshData, apiService);
+                            }, // Nonaktifkan onTap
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -38,7 +42,8 @@ Widget buildDowntimeTab(BuildContext context, Mesin mesinDetail) {
                                 ),
                                 SizedBox(height: 4),
                                 Text(
-                                  'Downtime Role ID: ${role.downtimeRoleID}',
+                                  // 'Downtime Role ID: ${role.downtimeRoleID}',
+                                  'Attempt: ${role.downtimeRoleAttempt}',
                                   style: TextStyle(
                                     color: Colors.grey[600],
                                   ),
@@ -79,51 +84,5 @@ Widget buildDowntimeTab(BuildContext context, Mesin mesinDetail) {
         ),
       ],
     ),
-  );
-}
-
-
-
-void _showBottomModal(BuildContext context, DowntimePeran role) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true, // Allow the bottom sheet to use the full screen height
-    backgroundColor: Colors.transparent, // Make background transparent
-    builder: (BuildContext context) {
-      return Container(
-        width: double.infinity, // Set width to fill the screen
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Colors.white, // Background color of the modal
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)), // Rounded corners
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              ('(${role.downtimeRoleStatus}) ${role.downtimeRoleName}'),
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text('Ambil tindakan sebagai ${role.downtimeRoleName}'),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Accept action here
-                Navigator.pop(context); // Close the modal
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Colors.green, // Text color
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: Text('Terima'),
-            ),
-          ],
-        ),
-      );
-    },
   );
 }

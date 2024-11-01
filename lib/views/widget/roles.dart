@@ -80,24 +80,3 @@ Widget buildRolesTab(BuildContext context, Mesin mesinDetail, ApiService apiServ
     ),
   );
 }
-
-// Fungsi untuk menampilkan alert jika mesin tidak dapat diubah
-void _showAlert(BuildContext context, String message) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Peringatan'),
-        content: Text(message),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-            },
-            child: Text('OK'),
-          ),
-        ],
-      );
-    },
-  );
-}

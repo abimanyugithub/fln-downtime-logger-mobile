@@ -21,24 +21,30 @@ class DowntimePeran {
   final int downtimeRoleID; // ID Downtime Role
   final String downtimeRoleName; // Name of the downtime role
   final String downtimeRoleStatus;
+  final String downtimeMesinID;
+  final int downtimeRoleAttempt;
 
   DowntimePeran({
     required this.downtimeRoleID,
     required this.downtimeRoleName,
     required this.downtimeRoleStatus,
+    required this.downtimeMesinID,
+    required this.downtimeRoleAttempt
   });
 
   factory DowntimePeran.fromJson(Map<String, dynamic> json) {
     return DowntimePeran(
       downtimeRoleID: json['id'],
+      downtimeMesinID: json['downtime'], // downtime mesin id
       downtimeRoleName: json['nama_peran'],
       downtimeRoleStatus: json['status'],// Sesuaikan dengan kunci JSON
+      downtimeRoleAttempt: json['attempt']
     );
   }
 }
 
 // DowntimeMesin
-class DowntimeMesin {
+/*class DowntimeMesin {
   final String downtimeMesinID; // ID Downtime Mesin
   final List<DowntimePeran> roles; // List Downtime Role
 
@@ -56,7 +62,7 @@ class DowntimeMesin {
       roles: roleItems,
     );
   }
-}
+}*/
 
 class Mesin {
   final String id;
